@@ -1,13 +1,23 @@
 ![](https://github.com/CTFd/CTFd/blob/master/CTFd/themes/core/static/img/logo.png?raw=true)
 ====
 
-[![Build Status](https://travis-ci.org/CTFd/CTFd.svg?branch=master)](https://travis-ci.org/CTFd/CTFd)
-[![CTFd Slack](https://slack.ctfd.io/badge.svg)](https://slack.ctfd.io/)
+
+## LanCTFd -- Modified CTFd
+1. 添加谷歌验证码，支持大陆环境（via ctfd-recaptcha-plugin）
+2. 前端移除第三方授权验证，仅保留账号验证登录
+3. 小幅修改
+### Deploy
+```
+docker-compose up
+``` 
+### Backup
+使用 docker-compose 方式部署时，redis、misql、CTFd 挂载于 .data 目录以备份。
+### Maintance
+docker-compsoe.yml services restart automaticly
 
 ## What is CTFd?
 CTFd is a Capture The Flag framework focusing on ease of use and customizability. It comes with everything you need to run a CTF and it's easy to customize with plugins and themes.
 
-![CTFd is a CTF in a can.](https://github.com/CTFd/CTFd/blob/master/CTFd/themes/core/static/img/scoreboard.png?raw=true)
 
 ## Features
  * Create your own challenges, categories, hints, and flags from the Admin Interface
