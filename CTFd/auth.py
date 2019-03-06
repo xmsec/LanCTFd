@@ -67,9 +67,13 @@ def confirm(data=None):
         if request.method == "POST":
             # User wants to resend their confirmation email
             if send_mail_limit():
-                email.verify_email_address(user.email)
-                log('registrations', format="[{date}] {ip} - {name} initiated a confirmation email resend")
-                return render_template('confirm.html', user=user, infos=['Your confirmation email has been resent!'])
+                status = email.verify_email_address(user.email)
+                if status[0]:
+                    log('registrations', format="[{date}] {ip} - {name} initiated a confirmation email resend")
+                    return render_template('confirm.html', user=user, infos=['Your confirmation email has been resent!'])
+                else:
+                    log('registrations', format="[{date}] {ip} - {name} initiated a confirmation email resend with status fail, status: "+status[1])
+                    return render_template('confirm.html', user=user, infos=['Your confirmation email has been resent! As server is unstable now, maybe the email was sent failed. If you have any question, please contact admin!'])
             else:
                 log('registrations', format="[{date}] {ip} - {name}'s confirmation email being resent was REJECT!")
                 return render_template('confirm.html', user=user, infos=['The times of your confirmation email have reached the limit, please contact admin!'])
@@ -188,8 +192,11 @@ def register():
                 login_user(user)
 
                 if config.can_send_mail() and get_config('verify_emails'):  # Confirming users is enabled and we can send email.
-                    log('registrations', format="[{date}] {ip} - {name} registered (UNCONFIRMED) with {email}")
-                    email.verify_email_address(user.email)
+                    status = email.verify_email_address(user.email)
+                    if status[0]:
+                        log('registrations', format="[{date}] {ip} - {name} registered (UNCONFIRMED) with {email}")
+                    else:
+                        log('registrations', format="[{date}] {ip} - {name} registered (UNCONFIRMED) with {email} with status fail, status:"+status[1])
                     db.session.close()
                     return redirect(url_for('auth.confirm'))
                 else:  # Don't care about confirming users

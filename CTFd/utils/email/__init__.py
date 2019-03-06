@@ -28,9 +28,9 @@ def forgot_password(email, team_name):
 
     <div style="background: #fff; margin: 0 auto; max-width: 550px;">
         <p style="font-size: 1.25rem; font-weight: 200; line-height: 1.5rem;">
-            您好，您正在重置账号
+            How to reset your password is as follows.
         </p>
-        <p>请点击下面链接以重置账号: </p>
+        <p>Please click the following link to reset your password:</p>
         
         <a href="{0}/{1}
            style="background: #22b8eb;
@@ -44,7 +44,8 @@ def forgot_password(email, team_name):
            cursor: pointer;
            border-radius: 5px;">Confirm Your Email</a>
         <br>
-        <br><br><br><br>若您误收到此电子邮件，可能是其他用户在申请帐号时误操作，您可忽略此邮件。
+        <br><br><br><br>If you are not trying to reset your password, please ignore this email. It is possible that another user entered their login information incorrectly.<br>
+
     </div>
     
 </body>
@@ -55,7 +56,7 @@ def forgot_password(email, team_name):
 
 """.format(url_for('auth.reset_password', _external=True), token)
 
-    sendmail(email, text)
+    return sendmail(email, text)
 
 
 def verify_email_address(addr):
@@ -68,9 +69,9 @@ def verify_email_address(addr):
 
     <div style="background: #fff; margin: 0 auto; max-width: 550px;">
         <p style="font-size: 1.25rem; font-weight: 200; line-height: 1.5rem;">
-            您好，欢迎加入 {ctf_name}，您正在激活账号
+            Welcome to {ctf_name}.
         </p>
-        <p>请点击下面链接以激活 {ctf_name} 中的账号: </p>
+        <p>Please click the following link to confirm your email address for {ctf_name}: </p>
         
         <a href="{url}/{token}"
            style="background: #22b8eb;
@@ -83,8 +84,8 @@ def verify_email_address(addr):
            text-align: center;
            cursor: pointer;
            border-radius: 5px;">Confirm Your Email</a>
-        <br>{info_add}
-        <br><br><br><br>若您误收到此电子邮件，可能是其他用户在申请帐号时误操作，您可忽略此邮件。
+        <br>If you are not trying to confirm your email, please ignore this email. It is possible that another user entered their login information incorrectly.<br>
+        <br><br><br><br>{info_add}
     </div>
     
 </body>
@@ -94,9 +95,9 @@ def verify_email_address(addr):
         ctf_name=get_config('ctf_name'),
         url=url_for('auth.confirm', _external=True),
         token=token,
-        info_add="LanCTF 由 Lancet 举办，由一群热爱网络安全的北航学生组成。Lancet 名为柳叶刀，寓意着 Lancet 战队既能做披襟斩棘的战刃，也能做祛病消灾的手术刀，以保护信息时代的安全感。"
+        info_add='Held by <a href="https://lancet.vip">Lancet</a>.'
     )
-    sendmail(addr, text)
+    return sendmail(addr, text)
 
 
 def check_email_format(email):

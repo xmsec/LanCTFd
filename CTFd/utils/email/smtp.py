@@ -46,7 +46,7 @@ def sendmail(addr, text):
     try:
         smtp = get_smtp(**data)
         msg = MIMEText(text, 'html', 'utf-8')
-        msg['Subject'] = Header("{0} 账户状态通知".format(ctf_name), 'utf-8')
+        msg['Subject'] = Header("{0} Account Status Message".format(ctf_name), 'utf-8')
         msg['From'] = ctf_name+'<'+mailfrom_addr+'>'
         msg['To'] = addr
 
