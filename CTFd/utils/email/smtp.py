@@ -1,5 +1,6 @@
 from CTFd.utils import get_config, get_app_config
 from email.mime.text import MIMEText
+from email.header import Header
 from socket import timeout
 import smtplib
 
@@ -44,9 +45,9 @@ def sendmail(addr, text):
 
     try:
         smtp = get_smtp(**data)
-        msg = MIMEText(text)
-        msg['Subject'] = "Message from {0}".format(ctf_name)
-        msg['From'] = mailfrom_addr
+        msg = MIMEText(text, 'html', 'utf-8')
+        msg['Subject'] = Header("{0} 账户状态通知".format(ctf_name), 'utf-8')
+        msg['From'] = ctf_name+'<'+mailfrom_addr+'>'
         msg['To'] = addr
 
         smtp.sendmail(msg['From'], [msg['To']], msg.as_string())

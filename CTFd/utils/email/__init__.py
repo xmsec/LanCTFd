@@ -20,9 +20,38 @@ def sendmail(addr, text):
 
 def forgot_password(email, team_name):
     token = serialize(team_name)
-    text = """Did you initiate a password reset? Click the following link to reset your password:
+    text = """
+    <!DOCTYPE html>
+<html>
 
-{0}/{1}
+<body style="margin: 0; font-family: 'Cabin', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';color: #6e7b8a; text-align: center;">
+
+    <div style="background: #fff; margin: 0 auto; max-width: 550px;">
+        <p style="font-size: 1.25rem; font-weight: 200; line-height: 1.5rem;">
+            您好，您正在重置账号
+        </p>
+        <p>请点击下面链接以重置账号: </p>
+        
+        <a href="{0}/{1}
+           style="background: #22b8eb;
+           padding: 10px 20px 10px 30px;
+           margin-bottom: 20px;
+           color: #fff;
+           font-size: .85rem;
+           text-decoration: none;
+           display: inline-block;
+           text-align: center;
+           cursor: pointer;
+           border-radius: 5px;">Confirm Your Email</a>
+        <br>
+        <br><br><br><br>若您误收到此电子邮件，可能是其他用户在申请帐号时误操作，您可忽略此邮件。
+    </div>
+    
+</body>
+
+</html>
+
+
 
 """.format(url_for('auth.reset_password', _external=True), token)
 
@@ -31,10 +60,41 @@ def forgot_password(email, team_name):
 
 def verify_email_address(addr):
     token = serialize(addr)
-    text = """Please click the following link to confirm your email address for {ctf_name}: {url}/{token}""".format(
+    text = """
+<!DOCTYPE html>
+<html>
+
+<body style="margin: 0; font-family: 'Cabin', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';color: #6e7b8a; text-align: center;">
+
+    <div style="background: #fff; margin: 0 auto; max-width: 550px;">
+        <p style="font-size: 1.25rem; font-weight: 200; line-height: 1.5rem;">
+            您好，欢迎加入 {ctf_name}，您正在激活账号
+        </p>
+        <p>请点击下面链接以激活 {ctf_name} 中的账号: </p>
+        
+        <a href="{url}/{token}"
+           style="background: #22b8eb;
+           padding: 10px 20px 10px 30px;
+           margin-bottom: 20px;
+           color: #fff;
+           font-size: .85rem;
+           text-decoration: none;
+           display: inline-block;
+           text-align: center;
+           cursor: pointer;
+           border-radius: 5px;">Confirm Your Email</a>
+        <br>{info_add}
+        <br><br><br><br>若您误收到此电子邮件，可能是其他用户在申请帐号时误操作，您可忽略此邮件。
+    </div>
+    
+</body>
+
+</html>
+    """.format(
         ctf_name=get_config('ctf_name'),
         url=url_for('auth.confirm', _external=True),
-        token=token
+        token=token,
+        info_add="LanCTF 由 Lancet 举办，由一群热爱网络安全的北航学生组成。Lancet 名为柳叶刀，寓意着 Lancet 战队既能做披襟斩棘的战刃，也能做祛病消灾的手术刀，以保护信息时代的安全感。"
     )
     sendmail(addr, text)
 

@@ -14,7 +14,7 @@ from CTFd.utils.decorators import ratelimit
 from CTFd.utils import user as current_user
 from CTFd.utils import config, validators
 from CTFd.utils import email
-from CTFd.utils.security.auth import login_user, logout_user
+from CTFd.utils.security.auth import login_user, logout_user, send_mail_limit
 from CTFd.utils.security.passwords import hash_password, check_password
 from CTFd.utils.logging import log
 from CTFd.utils.decorators.visibility import check_registration_visibility
@@ -66,9 +66,13 @@ def confirm(data=None):
     if data is None:
         if request.method == "POST":
             # User wants to resend their confirmation email
-            email.verify_email_address(user.email)
-            log('registrations', format="[{date}] {ip} - {name} initiated a confirmation email resend")
-            return render_template('confirm.html', user=user, infos=['Your confirmation email has been resent!'])
+            if send_mail_limit():
+                email.verify_email_address(user.email)
+                log('registrations', format="[{date}] {ip} - {name} initiated a confirmation email resend")
+                return render_template('confirm.html', user=user, infos=['Your confirmation email has been resent!'])
+            else:
+                log('registrations', format="[{date}] {ip} - {name}'s confirmation email being resent was REJECT!")
+                return render_template('confirm.html', user=user, infos=['The times of your confirmation email have reached the limit, please contact admin!'])
         elif request.method == "GET":
             # User has been directed to the confirm page
             return render_template('confirm.html', user=user)
