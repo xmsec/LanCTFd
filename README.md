@@ -3,7 +3,7 @@
 
 
 ## LanCTFd -- Modified CTFd
-1. 添加谷歌验证码，支持大陆环境（via ctfd-recaptcha-plugin）
+1. 添加谷歌验证码，支持大陆环境（via [ctfd-recaptcha-plugin](https://github.com/tamuctf/ctfd-recaptcha-plugin)）
 2. 前端移除第三方授权验证，仅保留账号验证登录
 3. 修改 SMTP 服务器发信内容，减少被服务器拒绝概率
 4. 控制未验证账号重发次数，在 CTFd/utils/security/auth.py 中硬编码实现
