@@ -103,11 +103,25 @@ class DynamicValueChallenge(BaseChallenge):
 
         # It is important that this calculation takes into account floats.
         # Hence this file uses from __future__ import division
-        value = (((challenge.minimum - challenge.initial) / (challenge.decay ** 2)) * (solve_count ** 2)) + challenge.initial
+        # value = (((challenge.minimum - challenge.initial) / (challenge.decay ** 2)) * (solve_count ** 2)) + challenge.initial
 
+        # value = math.ceil(value)
+
+        # if value < challenge.minimum:
+        #     value = challenge.minimum
+      
+        value = challenge.initial * 0.03 + ( # designed for 20 team at most
+            (challenge.initial * 0.97) / (1 +
+                (max(0, solve_count-1) / 4.92201) ** 3.206069
+            )
+        )
+        
         value = math.ceil(value)
 
         if value < challenge.minimum:
+            value = challenge.minimum
+
+        if challenge.decay != 0 and solve_count >= challenge.decay:
             value = challenge.minimum
 
         challenge.value = value
@@ -178,17 +192,26 @@ class DynamicValueChallenge(BaseChallenge):
 
         # It is important that this calculation takes into account floats.
         # Hence this file uses from __future__ import division
-        value = (
-            (
-                (chal.minimum - chal.initial) / (chal.decay**2)
-            ) * (solve_count**2)
-        ) + chal.initial
-
+        # value = (
+        #     (
+        #         (chal.minimum - chal.initial) / (chal.decay**2)
+        #     ) * (solve_count**2)
+        # ) + chal.initial
+      
+        value = chal.initial * 0.03 + (
+            (chal.initial * 0.97) / (1 +
+                (max(0, solve_count) / 4.92201) ** 3.206069
+            )
+        )
+        
         value = math.ceil(value)
 
         if value < chal.minimum:
             value = chal.minimum
 
+        if chal.decay != 0 and solve_count >= chal.decay:
+            value = chal.minimum
+      
         chal.value = value
 
         solve = Solves(
