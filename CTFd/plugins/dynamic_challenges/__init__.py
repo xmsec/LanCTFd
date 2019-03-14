@@ -197,22 +197,26 @@ class DynamicValueChallenge(BaseChallenge):
         #         (chal.minimum - chal.initial) / (chal.decay**2)
         #     ) * (solve_count**2)
         # ) + chal.initial
-      
-        value = chal.initial * 0.03 + (
-            (chal.initial * 0.97) / (1 +
-                (max(0, solve_count) / 4.92201) ** 3.206069
+
+        if (team and team.hidden == True) or (not team and user.hidden == True):
+            pass
+        else:
+            
+            value = chal.initial * 0.03 + (
+                (chal.initial * 0.97) / (1 +
+                    (max(0, solve_count) / 4.92201) ** 3.206069
+                )
             )
-        )
+            
+            value = math.ceil(value)
+
+            if value < chal.minimum:
+                value = chal.minimum
+
+            if chal.decay != 0 and solve_count >= chal.decay:
+                value = chal.minimum
         
-        value = math.ceil(value)
-
-        if value < chal.minimum:
-            value = chal.minimum
-
-        if chal.decay != 0 and solve_count >= chal.decay:
-            value = chal.minimum
-      
-        chal.value = value
+            chal.value = value
 
         solve = Solves(
             user_id=user.id,
