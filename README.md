@@ -9,7 +9,8 @@
 4. 控制未验证账号重发次数，在 CTFd/utils/security/auth.py 中硬编码实现
 5. 动态积分插件，计分公式适应性修改，适配20人解出时达到最低值，使用自定义公式
 6. 修复动态积分插件中，隐藏用户提交 flag 后造成分数变化的 bug
-7. 小幅修改
+7. 修复普通用户在 profile 中排名与 scoreboard 排名不一致的 bug
+8. 小幅修改
 ### Deploy
 ```
 docker-compose up
