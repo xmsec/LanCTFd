@@ -1,7 +1,9 @@
 ![](https://github.com/CTFd/CTFd/blob/master/CTFd/themes/core/static/img/logo.png?raw=true)
 ====
 
-
+## CTFd
+https://github.com/CTFd/CTFd
+请使用官方CTFd，以发现的 bug 已提交修复，且本身版本比官方版本低，存在其他 bug。
 ## LanCTFd -- Modified CTFd
 1. 添加谷歌验证码，支持大陆环境（via [ctfd-recaptcha-plugin](https://github.com/tamuctf/ctfd-recaptcha-plugin)）
 2. 前端移除第三方授权验证，仅保留账号验证登录
@@ -11,6 +13,103 @@
 6. 修复动态积分插件中，隐藏用户提交 flag 后造成分数变化的 bug [PR](https://github.com/CTFd/CTFd/pull/919)
 7. 修复普通用户在 profile 中排名与 scoreboard 排名不一致的 bug [PR](https://github.com/CTFd/CTFd/pull/918)
 8. 小幅修改
+### Code
+#### 控制重发
+`CTFd/utils/security/auth.py`
+```
+def send_mail_limit():
+    if session['elimit']<2:
+        session['elimit']=session['elimit']+1
+        return  True
+    return False
+```
+
+```
+def confirm(data=None):
+  ……
+     if data is None:
+        if request.method == "POST":
+            # User wants to resend their confirmation email
+            if send_mail_limit():
+            ……
+            
+```
+#### 动态积分
+```
+            value = chal.initial * 0.03 + (
+                (chal.initial * 0.97) / (1 +
+                    (max(0, solve_count) / 4.92201) ** 3.206069
+                )
+            )
+            
+            value = math.ceil(value)
+
+            if value < chal.minimum:
+                value = chal.minimum
+
+            if chal.decay != 0 and solve_count >= chal.decay:
+                value = chal.minimum
+        
+```
+#### SMTP
+`smtp.py`
+```
+def sendmail(addr, text):
+    ……
+        try:
+        smtp = get_smtp(**data)
+        msg = MIMEText(text, 'html', 'utf-8')
+        msg['Subject'] = Header("{0} Account Status Message".format(ctf_name), 'utf-8')
+        msg['From'] = ctf_name+'<'+mailfrom_addr+'>'
+        msg['To'] = addr
+
+        smtp.sendmail(msg['From'], [msg['To']], msg.as_string())
+        smtp.quit()
+        return True, "Email sent"
+```
+`__init__.py`
+```
+    def verify_email_address(addr):
+    token = serialize(addr)
+    text = """
+<!DOCTYPE html>
+<html>
+
+<body style="margin: 0; font-family: 'Cabin', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';color: #6e7b8a; text-align: center;">
+
+    <div style="background: #fff; margin: 0 auto; max-width: 550px;">
+        <p style="font-size: 1.25rem; font-weight: 200; line-height: 1.5rem;">
+            Welcome to {ctf_name}.
+        </p>
+        <p>Please click the following link to confirm your email address for {ctf_name}: </p>
+        
+        <a href="{url}/{token}"
+           style="background: #22b8eb;
+           padding: 10px 20px 10px 30px;
+           margin-bottom: 20px;
+           color: #fff;
+           font-size: .85rem;
+           text-decoration: none;
+           display: inline-block;
+           text-align: center;
+           cursor: pointer;
+           border-radius: 5px;">Confirm Your Email</a>
+        <br>If you are not trying to confirm your email, please ignore this email. It is possible that another user entered their login information incorrectly.<br>
+        <br><br><br><br>{info_add}
+    </div>
+    
+</body>
+
+</html>
+    """.format(
+        ctf_name=get_config('ctf_name'),
+        url=url_for('auth.confirm', _external=True),
+        token=token,
+        info_add='Held by <a href="https://lancet.vip">Lancet</a>.'
+    )
+    return sendmail(addr, text)
+```
+
 ### Deploy
 ```
 docker-compose up
