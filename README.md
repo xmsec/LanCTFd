@@ -8,8 +8,8 @@
 3. 修改 SMTP 服务器发信内容，减少被服务器拒绝概率；修复发信返回值未判断的 bug（官方已 fix）
 4. 控制未验证账号重发次数，在 CTFd/utils/security/auth.py 中硬编码实现
 5. 动态积分插件，计分公式适应性修改，适配20人解出时达到最低值，使用自定义公式
-6. 修复动态积分插件中，隐藏用户提交 flag 后造成分数变化的 bug [pr](https://github.com/CTFd/CTFd/pull/909)
-7. 修复普通用户在 profile 中排名与 scoreboard 排名不一致的 bug [pr](https://github.com/CTFd/CTFd/pull/918)
+6. 修复动态积分插件中，隐藏用户提交 flag 后造成分数变化的 bug [PR](https://github.com/CTFd/CTFd/pull/919)
+7. 修复普通用户在 profile 中排名与 scoreboard 排名不一致的 bug [PR](https://github.com/CTFd/CTFd/pull/918)
 8. 小幅修改
 ### Deploy
 ```
