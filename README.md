@@ -3,7 +3,9 @@
 
 ## CTFd
 https://github.com/CTFd/CTFd
-请使用官方CTFd，以发现的 bug 已提交修复，且本身版本比官方版本低，存在其他 bug。
+
+
+请使用官方CTFd，已发现的 bug 已提交修复，且本身版本比官方版本低，存在其他 bug。
 ## LanCTFd -- Modified CTFd
 1. 添加谷歌验证码，支持大陆环境（via [ctfd-recaptcha-plugin](https://github.com/tamuctf/ctfd-recaptcha-plugin)）
 2. 前端移除第三方授权验证，仅保留账号验证登录
