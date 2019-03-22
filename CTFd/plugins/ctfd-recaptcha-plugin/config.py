@@ -10,14 +10,14 @@ def config(app):
     RECAPTCHA_SECRET is the secret key provided to you by Google for reCaptcha
     You may either set the RECAPTCHA_SECRET env variable or save it here in this file
     '''
-    app.config['RECAPTCHA_SECRET'] = "6LezQ5UUAAAAAFngd6Mi9Z5rsf8TH9OCCIDhuKvm"#environ.get('RECAPTCHA_SECRET', 'INVALID_SECRET')
+    app.config['RECAPTCHA_SECRET'] = "testkey"#environ.get('RECAPTCHA_SECRET', 'INVALID_SECRET')
 
     '''
     RECAPTCHA_SITE_KEY is the public site key provided to you by Google for reCaptcha
     Needed if `RECAPTCHA_INSERT_TAGS` is True
     You may either set the RECAPTCHA_SITE_KEY env variable or save it here in this file
     '''
-    app.config['RECAPTCHA_SITE_KEY'] = "6LezQ5UUAAAAAA-1Fw8CQ5cDyxewui-ej92WJaZK"#environ.get('RECAPTCHA_SITE_KEY', 'INVALID_SITE_KEY')
+    app.config['RECAPTCHA_SITE_KEY'] = "testkey"#environ.get('RECAPTCHA_SITE_KEY', 'INVALID_SITE_KEY')
 
     '''
     RECAPTCHA_INSERT_TAGS determines if the plugin should automatically attempt to insert tags (i.e. the script and check box)
